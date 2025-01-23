@@ -52,4 +52,22 @@ class SiswaController extends Controller
         sweetalert()->success('Anda, ' . $request->nama . ' telah berhasil mendaftar!');
         return redirect('/pendaftaran');
     }
+
+    function index(Request $request)
+    {
+        $cari = $request->cari;
+
+        $data = Siswa::where(function ($query) use ($cari) {
+            if ($cari) {
+                $query->where('nik', 'like', '%' . $cari . '%')
+                    ->orWhere('nisn', 'like', '%' . $cari . '%')
+                    ->orWhere('nama', 'like', '%' . $cari . '%')
+                    ->orWhere('pekerjaan', 'like', '%' . $cari . '%');
+            }
+        })->orderBy('id', 'desc')
+            ->paginate(2)
+            ->withQueryString();
+
+        return view('siswa.index', ['data' => $data]);
+    }
 }

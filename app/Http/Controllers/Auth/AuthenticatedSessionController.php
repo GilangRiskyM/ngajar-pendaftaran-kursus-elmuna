@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
+        sweetalert()->info('Selamat datang ' . Auth::user()->name . '!');
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
